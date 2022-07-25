@@ -24,6 +24,7 @@ const run =async()=>{
         
         //database collections
         const productCollection = client.db('happy-shopping-cart').collection('products');
+        const orderCollection = client.db('happy-shopping-cart').collection('orders');
 
         app.get('/products',async(req,res)=>{
             const result = await productCollection.find().toArray();
@@ -36,11 +37,24 @@ const run =async()=>{
             res.send(result);
         })
 
+        app.get('/order/:email',async(req,res)=>{
+            const email = req.params.email;
+            console.log(email);
+            const result = await orderCollection.find({ email: email }).toArray();
+            res.send(result);
+        })
+
         app.post('/products',async(req,res)=>{
             const data=req.body;
             const result= await productCollection.insertOne(data);
             res.send(result);
-        })
+        });
+
+        app.post('/order',async(req,res)=>{
+            const data=req.body;
+            const result= await orderCollection.insertOne(data);
+            res.send(result);
+    })
 
     }
 
